@@ -1,0 +1,11 @@
+module github.com/onmetahq/go-kit-helpers
+
+go 1.19
+
+require (
+	github.com/go-kit/kit v0.12.0 // indirect
+	github.com/go-kit/log v0.2.1 // indirect
+	github.com/go-logfmt/logfmt v0.5.1 // indirect
+	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
+	github.com/krishnateja262/meta-http v0.0.0-20221128140732-934494c70332 // indirect
+)
