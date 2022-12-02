@@ -5,7 +5,7 @@ import (
 
 	"github.com/go-kit/log"
 	"github.com/go-kit/log/level"
-	metahttp "github.com/krishnateja262/meta-http/pkg/meta_http"
+	"github.com/onmetahq/meta-http/pkg/utils"
 )
 
 type CtxLogger interface {
@@ -31,7 +31,7 @@ func NewCtxLogger(logger log.Logger) CtxLogger {
 }
 
 func (l *customLogger) Context(ctx context.Context) CtxLogger {
-	data := metahttp.FetchHeadersFromContext(ctx)
+	data := utils.FetchHeadersFromContext(ctx)
 	args := []interface{}{}
 	for key, value := range data {
 		args = append(args, key)

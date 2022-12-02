@@ -5,9 +5,10 @@ import (
 	"time"
 
 	"github.com/go-kit/kit/endpoint"
-	metahttp "github.com/krishnateja262/meta-http/pkg/meta_http"
 	"github.com/onmetahq/go-kit-helpers/pkg/logger"
 	"github.com/onmetahq/go-kit-helpers/pkg/models"
+	metahttp "github.com/onmetahq/meta-http/pkg/meta_http"
+	onmetamodels "github.com/onmetahq/meta-http/pkg/models"
 )
 
 type Merchant struct {
@@ -110,7 +111,7 @@ func (svc DefaultValidator) ValidateKey(ctx context.Context, apikey string) (Mer
 func MerchantAPIKeyValidator(svc KeyValidator, logger logger.CtxLogger) endpoint.Middleware {
 	return func(next endpoint.Endpoint) endpoint.Endpoint {
 		return func(ctx context.Context, request interface{}) (response interface{}, err error) {
-			apikey, ok := ctx.Value(metahttp.MerchantAPIKey).(string)
+			apikey, ok := ctx.Value(onmetamodels.MerchantAPIKey).(string)
 			if !ok {
 				logger.Context(ctx).Error().Log("msg", "Invalid Merchant API key")
 				return nil, models.ErrUnauthorized
@@ -122,7 +123,7 @@ func MerchantAPIKeyValidator(svc KeyValidator, logger logger.CtxLogger) endpoint
 				return nil, models.ErrUnauthorized
 			}
 
-			ctx = context.WithValue(ctx, metahttp.TenantID, mer.ID)
+			ctx = context.WithValue(ctx, onmetamodels.TenantID, mer.ID)
 			return next(ctx, request)
 		}
 	}

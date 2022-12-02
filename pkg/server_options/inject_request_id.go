@@ -5,9 +5,9 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
-	metahttp "github.com/krishnateja262/meta-http/pkg/meta_http"
+	"github.com/onmetahq/meta-http/pkg/models"
 )
 
 func PutRequestIdInCtx(ctx context.Context, r *http.Request) context.Context {
-	return context.WithValue(ctx, metahttp.RequestID, uuid.NewString())
+	return context.WithValue(ctx, models.RequestID, uuid.NewString())
 }

@@ -5,9 +5,9 @@ import (
 
 	"github.com/go-kit/kit/endpoint"
 	"github.com/golang-jwt/jwt"
-	metahttp "github.com/krishnateja262/meta-http/pkg/meta_http"
 	"github.com/onmetahq/go-kit-helpers/pkg/logger"
 	"github.com/onmetahq/go-kit-helpers/pkg/models"
+	onmetamodels "github.com/onmetahq/meta-http/pkg/models"
 )
 
 func JWTValidator(hmacSecret string, logger logger.CtxLogger) endpoint.Middleware {
@@ -52,9 +52,9 @@ func JWTValidator(hmacSecret string, logger logger.CtxLogger) endpoint.Middlewar
 			}
 
 			ctx = context.WithValue(ctx, models.JWTClaimsContextKey, claims)
-			ctx = context.WithValue(ctx, metahttp.TenantID, claims.TenantID)
+			ctx = context.WithValue(ctx, onmetamodels.TenantID, claims.TenantID)
 			ctx = context.WithValue(ctx, models.USERID, claims.UserId) // TODO: Remove it soon
-			ctx = context.WithValue(ctx, metahttp.UserID, claims.UserId)
+			ctx = context.WithValue(ctx, onmetamodels.UserID, claims.UserId)
 
 			return next(ctx, request)
 		}
