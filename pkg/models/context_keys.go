@@ -1,4 +1,4 @@
-package validators
+package models
 
 import (
 	"errors"
@@ -10,14 +10,11 @@ type contextKey string
 
 const (
 	// JWTContextKey holds the key used to store a JWT in the context.
-	JWTContextKey      contextKey = "JWTToken"
-	JWTTokenContextKey            = JWTContextKey
-
-	JWTClaimsContextKey contextKey = "JWTClaims"
-
+	JWTContextKey        contextKey = "JWTToken"
+	JWTTokenContextKey              = JWTContextKey
+	JWTClaimsContextKey  contextKey = "JWTClaims"
 	PathParamsContextKey contextKey = "PathParams"
-
-	USERID contextKey = "UserID"
+	USERID               contextKey = "UserID"
 )
 
 type Claims struct {

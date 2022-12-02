@@ -7,6 +7,7 @@ import (
 	"github.com/go-kit/kit/endpoint"
 	metahttp "github.com/krishnateja262/meta-http/pkg/meta_http"
 	"github.com/onmetahq/go-kit-helpers/pkg/logger"
+	"github.com/onmetahq/go-kit-helpers/pkg/models"
 )
 
 type Merchant struct {
@@ -54,7 +55,7 @@ func (store DefaultStore) Get(key string) (Merchant, error) {
 		return mer, nil
 	}
 
-	return Merchant{}, ErrNotFound
+	return Merchant{}, models.ErrNotFound
 }
 
 func NewValidator(client *metahttp.Client) KeyValidator {
@@ -88,7 +89,7 @@ func (svc DefaultValidator) fetchMerchantDetails(ctx context.Context, apikey str
 func (svc DefaultValidator) ValidateKey(ctx context.Context, apikey string) (Merchant, error) {
 	mer, err := svc.store.Get(apikey)
 
-	if err != nil && err == ErrNotFound {
+	if err != nil && err == models.ErrNotFound {
 		mer, err = svc.fetchMerchantDetails(ctx, apikey)
 
 		if err != nil {
@@ -112,13 +113,13 @@ func MerchantAPIKeyValidator(svc KeyValidator, logger logger.CtxLogger) endpoint
 			apikey, ok := ctx.Value(metahttp.MerchantAPIKey).(string)
 			if !ok {
 				logger.Context(ctx).Error().Log("msg", "Invalid Merchant API key")
-				return nil, ErrUnauthorized
+				return nil, models.ErrUnauthorized
 			}
 
 			mer, err := svc.ValidateKey(ctx, apikey)
 			if err != nil || mer.ID == "" {
 				logger.Context(ctx).Error().Log("msg", "Merchant API key does not exist")
-				return nil, ErrUnauthorized
+				return nil, models.ErrUnauthorized
 			}
 
 			ctx = context.WithValue(ctx, metahttp.TenantID, mer.ID)
