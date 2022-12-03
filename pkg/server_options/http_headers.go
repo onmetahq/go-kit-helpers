@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/onmetahq/go-kit-helpers/pkg/models"
-	onmetamodels "github.com/onmetahq/meta-http/pkg/models"
+	ctxKeys "github.com/onmetahq/meta-http/pkg/models"
 	"github.com/onmetahq/meta-http/pkg/utils"
 )
 
@@ -21,11 +21,11 @@ func PutHeadersInCtx(ctx context.Context, r *http.Request) context.Context {
 	}
 
 	if r.Header.Get("apikey") != "" {
-		ctx = context.WithValue(ctx, onmetamodels.APIContextKey, r.Header.Get("apikey"))
+		ctx = context.WithValue(ctx, ctxKeys.APIContextKey, r.Header.Get("apikey"))
 	}
 
 	if r.Header.Get("x-api-key") != "" {
-		ctx = context.WithValue(ctx, onmetamodels.MerchantAPIKey, r.Header.Get("x-api-key"))
+		ctx = context.WithValue(ctx, ctxKeys.MerchantAPIKey, r.Header.Get("x-api-key"))
 	}
 
 	return ctx
