@@ -5,12 +5,17 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/gorilla/mux"
 	"github.com/onmetahq/go-kit-helpers/pkg/models"
-	ctxKeys "github.com/onmetahq/meta-http/pkg/models"
 	"github.com/onmetahq/meta-http/pkg/utils"
 )
 
-func PutHeadersInCtx(ctx context.Context, r *http.Request) context.Context {
+func PutReqInCtx(ctx context.Context, r *http.Request) context.Context {
+	vars := mux.Vars(r)
+	ctx = context.WithValue(ctx, models.PathParamsContextKey, vars)
+	ctx = context.WithValue(ctx, models.HttpMethod, r.Method)
+	ctx = context.WithValue(ctx, models.URLPath, r.URL.Path)
+
 	ctx = utils.FetchContextFromHeaders(ctx, r)
 
 	if r.Header.Get("Authorization") != "" {
@@ -18,14 +23,6 @@ func PutHeadersInCtx(ctx context.Context, r *http.Request) context.Context {
 		if len(authHeaderStrings) > 1 {
 			ctx = context.WithValue(ctx, models.JWTContextKey, authHeaderStrings[1])
 		}
-	}
-
-	if r.Header.Get("apikey") != "" {
-		ctx = context.WithValue(ctx, ctxKeys.APIContextKey, r.Header.Get("apikey"))
-	}
-
-	if r.Header.Get("x-api-key") != "" {
-		ctx = context.WithValue(ctx, ctxKeys.MerchantAPIKey, r.Header.Get("x-api-key"))
 	}
 
 	return ctx

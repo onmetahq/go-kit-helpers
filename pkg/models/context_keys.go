@@ -15,6 +15,8 @@ const (
 	JWTClaimsContextKey  contextKey = "JWTClaims"
 	PathParamsContextKey contextKey = "PathParams"
 	USERID               contextKey = "UserID"
+	URLPath              contextKey = "URLPath"
+	HttpMethod           contextKey = "HttpMethod"
 )
 
 type Claims struct {
