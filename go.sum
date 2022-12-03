@@ -10,5 +10,5 @@ github.com/google/uuid v1.3.0 h1:t6JiXgmwXMjEs8VusXIJk2BXHsn+wx8BZdTaoZ5fu7I=
 github.com/google/uuid v1.3.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/gorilla/mux v1.8.0 h1:i40aqfkR1h2SlN9hojwV5ZA91wcXFOvkdNIeFDP5koI=
 github.com/gorilla/mux v1.8.0/go.mod h1:DVbg23sWSpFRCP0SfiEN6jmj59UnW/n46BH5rLB71So=
-github.com/krishnateja262/meta-http v0.0.0-20221128140732-934494c70332 h1:Xu2O5Z+1wlCa2jbDy0xx5aGU9lzMifQfRvkODz6vyEc=
-github.com/krishnateja262/meta-http v0.0.0-20221128140732-934494c70332/go.mod h1:MtLbOomVxKHrC33kRG5ohlG6mPSzfDXuMuN5STtEPhU=
+github.com/onmetahq/meta-http v0.0.0-20221202102128-715ff9429020 h1:LHsVj0rKUi+qLoNHhL28y/ogk8cZe82+hYyHduGpjxE=
+github.com/onmetahq/meta-http v0.0.0-20221202102128-715ff9429020/go.mod h1:pK6NY6qJmsuMqNwFH/Ze6GX88df+IO5JmE79kGgd9gw=

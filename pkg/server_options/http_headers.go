@@ -5,12 +5,13 @@ import (
 	"net/http"
 	"strings"
 
-	metahttp "github.com/krishnateja262/meta-http/pkg/meta_http"
 	"github.com/onmetahq/go-kit-helpers/pkg/models"
+	ctxKeys "github.com/onmetahq/meta-http/pkg/models"
+	"github.com/onmetahq/meta-http/pkg/utils"
 )
 
 func PutHeadersInCtx(ctx context.Context, r *http.Request) context.Context {
-	ctx = metahttp.FetchContextFromHeaders(ctx, r)
+	ctx = utils.FetchContextFromHeaders(ctx, r)
 
 	if r.Header.Get("Authorization") != "" {
 		authHeaderStrings := strings.Split(r.Header.Get("Authorization"), " ")
@@ -20,11 +21,11 @@ func PutHeadersInCtx(ctx context.Context, r *http.Request) context.Context {
 	}
 
 	if r.Header.Get("apikey") != "" {
-		ctx = context.WithValue(ctx, metahttp.APIContextKey, r.Header.Get("apikey"))
+		ctx = context.WithValue(ctx, ctxKeys.APIContextKey, r.Header.Get("apikey"))
 	}
 
 	if r.Header.Get("x-api-key") != "" {
-		ctx = context.WithValue(ctx, metahttp.MerchantAPIKey, r.Header.Get("x-api-key"))
+		ctx = context.WithValue(ctx, ctxKeys.MerchantAPIKey, r.Header.Get("x-api-key"))
 	}
 
 	return ctx
