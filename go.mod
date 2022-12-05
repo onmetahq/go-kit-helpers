@@ -9,5 +9,5 @@ require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/gorilla/mux v1.8.0 // indirect
-	github.com/onmetahq/meta-http v0.0.0-20221202102128-715ff9429020 // indirect
+	github.com/onmetahq/meta-http v0.0.0-20221205115540-a82765e4805c // indirect
 )
