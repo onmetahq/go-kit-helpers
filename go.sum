@@ -14,3 +14,5 @@ github.com/onmetahq/meta-http v0.0.0-20221202102128-715ff9429020 h1:LHsVj0rKUi+q
 github.com/onmetahq/meta-http v0.0.0-20221202102128-715ff9429020/go.mod h1:pK6NY6qJmsuMqNwFH/Ze6GX88df+IO5JmE79kGgd9gw=
 github.com/onmetahq/meta-http v0.0.0-20221205115540-a82765e4805c h1:7Jueew/MZAwhhQmdyMIPDr5LwE/QywOQ3jz+C39MdBA=
 github.com/onmetahq/meta-http v0.0.0-20221205115540-a82765e4805c/go.mod h1:pK6NY6qJmsuMqNwFH/Ze6GX88df+IO5JmE79kGgd9gw=
+github.com/onmetahq/meta-http v0.0.0-20221207093248-371f6fc25c64 h1:IoGaGpSzstsKgmM/l1qlqFTn78pi3wwE6Tye8wnLf7c=
+github.com/onmetahq/meta-http v0.0.0-20221207093248-371f6fc25c64/go.mod h1:EDwtfRpWEVE+ku9xZRRJMCIIRTs9I0qR/pAKGaIWcMA=
