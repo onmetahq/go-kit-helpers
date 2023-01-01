@@ -9,5 +9,9 @@ import (
 )
 
 func PutRequestIdInCtx(ctx context.Context, r *http.Request) context.Context {
-	return context.WithValue(ctx, models.RequestID, uuid.NewString())
+	val := r.Header.Get(string(models.RequestID))
+	if val == "" {
+		ctx = context.WithValue(ctx, models.RequestID, uuid.NewString())
+	}
+	return ctx
 }
