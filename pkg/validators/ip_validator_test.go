@@ -2,6 +2,7 @@ package validators
 
 import (
 	"context"
+	"os"
 	"testing"
 
 	"github.com/go-kit/kit/endpoint"
@@ -24,6 +25,7 @@ func TestIPValidator(t *testing.T) {
 	}
 
 	validIps := "10.20.1.3,asdaD,223.34.34.1,SADFASDF"
+	os.Setenv("apiKey", validIps)
 
 	tests := []struct {
 		name   string
@@ -111,7 +113,7 @@ func TestIPValidator(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		_, err := IPValidator(logger, validIps)(test.input.next)(test.input.ctx, map[string]string{})
+		_, err := IPValidator(logger)(test.input.next)(test.input.ctx, map[string]string{})
 		assert.Equal(t, test.output.err, err, test.name)
 	}
 }

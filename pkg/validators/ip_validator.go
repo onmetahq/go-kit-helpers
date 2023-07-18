@@ -2,6 +2,7 @@ package validators
 
 import (
 	"context"
+	"os"
 	"strings"
 
 	"github.com/go-kit/kit/endpoint"
@@ -11,7 +12,7 @@ import (
 	ctxKeys "github.com/onmetahq/meta-http/pkg/models"
 )
 
-func IPValidator(logger log.Logger, validIps string) endpoint.Middleware {
+func IPValidator(logger log.Logger) endpoint.Middleware {
 	return func(next endpoint.Endpoint) endpoint.Endpoint {
 		return func(ctx context.Context, request interface{}) (response interface{}, err error) {
 			lg := ctxLogger.NewCtxLogger(logger)
@@ -29,7 +30,7 @@ func IPValidator(logger log.Logger, validIps string) endpoint.Middleware {
 			}
 			incomingIps := strings.Split(ip, ",")
 
-			config := validIps
+			config := os.Getenv(apikey)
 			if len(config) == 0 {
 				lg.Context(ctx).Debug().Log("msg", "whitelisting is not configured for the api key", "apiKey", apikey)
 				return next(ctx, request)
