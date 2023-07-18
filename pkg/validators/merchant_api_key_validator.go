@@ -39,7 +39,7 @@ type KeyStore interface {
 }
 
 type DefaultValidator struct {
-	client *metahttp.Client
+	client metahttp.Requests
 	store  KeyStore
 }
 
@@ -60,7 +60,7 @@ func (store DefaultStore) Get(key string) (Merchant, error) {
 	return Merchant{}, models.ErrNotFound
 }
 
-func NewValidator(client *metahttp.Client) KeyValidator {
+func NewValidator(client metahttp.Requests) KeyValidator {
 	return &DefaultValidator{
 		client: client,
 		store: DefaultStore{
@@ -69,7 +69,7 @@ func NewValidator(client *metahttp.Client) KeyValidator {
 	}
 }
 
-func NewValidatorWithStore(client *metahttp.Client, store KeyStore) KeyValidator {
+func NewValidatorWithStore(client metahttp.Requests, store KeyStore) KeyValidator {
 	return &DefaultValidator{
 		client: client,
 		store:  store,

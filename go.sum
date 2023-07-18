@@ -7,6 +7,8 @@ github.com/go-kit/log v0.2.1 h1:MRVx0/zhvdseW+Gza6N9rVzU/IVzaeE1SFI4raAhmBU=
 github.com/go-kit/log v0.2.1/go.mod h1:NwTd00d/i8cPZ3xOwwiv2PO5MOcx78fFErGNcVmBjv0=
 github.com/go-logfmt/logfmt v0.5.1 h1:otpy5pqBCBZ1ng9RQ0dPu4PN7ba75Y/aA+UpowDyNVA=
 github.com/go-logfmt/logfmt v0.5.1/go.mod h1:WYhtIu8zTZfxdn5+rREduYbwxfcBr/Vr6KEVveWlfTs=
+github.com/go-logfmt/logfmt v0.6.0 h1:wGYYu3uicYdqXVgoYbvnkrPVXkuLM1p1ifugDMEdRi4=
+github.com/go-logfmt/logfmt v0.6.0/go.mod h1:WYhtIu8zTZfxdn5+rREduYbwxfcBr/Vr6KEVveWlfTs=
 github.com/golang-jwt/jwt v3.2.2+incompatible h1:IfV12K8xAKAnZqdXVzCZ+TOjboZ2keLg81eXfW3O+oY=
 github.com/golang-jwt/jwt v3.2.2+incompatible/go.mod h1:8pz2t5EyA70fFQQSrl6XZXzqecmYZeUEB8OUGHkxJ+I=
 github.com/google/uuid v1.3.0 h1:t6JiXgmwXMjEs8VusXIJk2BXHsn+wx8BZdTaoZ5fu7I=
@@ -21,6 +23,8 @@ github.com/onmetahq/meta-http v0.0.0-20221207093248-371f6fc25c64 h1:IoGaGpSzstsK
 github.com/onmetahq/meta-http v0.0.0-20221207093248-371f6fc25c64/go.mod h1:EDwtfRpWEVE+ku9xZRRJMCIIRTs9I0qR/pAKGaIWcMA=
 github.com/onmetahq/meta-http v0.0.1-alpha h1:euFnMFGf6wckm3YfTzj/nOcb9LAnGr+X77RmYs9V0j0=
 github.com/onmetahq/meta-http v0.0.1-alpha/go.mod h1:EDwtfRpWEVE+ku9xZRRJMCIIRTs9I0qR/pAKGaIWcMA=
+github.com/onmetahq/meta-http v0.0.2-alpha.0.20230718082101-326b0a824c02 h1:tDdmdv1E4KVcfnDeeyVlyPx9NhS/6+a7Eto5MoP/A08=
+github.com/onmetahq/meta-http v0.0.2-alpha.0.20230718082101-326b0a824c02/go.mod h1:EDwtfRpWEVE+ku9xZRRJMCIIRTs9I0qR/pAKGaIWcMA=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
