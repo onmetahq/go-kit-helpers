@@ -2,7 +2,6 @@ package validators
 
 import (
 	"context"
-	"os"
 	"strings"
 
 	"github.com/go-kit/kit/endpoint"
@@ -12,7 +11,7 @@ import (
 	ctxKeys "github.com/onmetahq/meta-http/pkg/models"
 )
 
-func IPValidator(logger log.Logger) endpoint.Middleware {
+func IPValidator(logger log.Logger, validIps string) endpoint.Middleware {
 	return func(next endpoint.Endpoint) endpoint.Endpoint {
 		return func(ctx context.Context, request interface{}) (response interface{}, err error) {
 			lg := ctxLogger.NewCtxLogger(logger)
@@ -28,21 +27,27 @@ func IPValidator(logger log.Logger) endpoint.Middleware {
 				lg.Context(ctx).Debug().Log("msg", "did not find client ip address, overriding ip check")
 				return next(ctx, request)
 			}
+			incomingIps := strings.Split(ip, ",")
 
-			config := os.Getenv(apikey)
+			config := validIps
 			if len(config) == 0 {
 				lg.Context(ctx).Debug().Log("msg", "whitelisting is not configured for the api key", "apiKey", apikey)
 				return next(ctx, request)
 			}
 
-			ips := strings.Split(config, ",")
-			for _, validIp := range ips {
-				if strings.EqualFold(strings.TrimSpace(validIp), strings.TrimSpace(ip)) {
+			eligibleIps := strings.Split(config, ",")
+			eligibleIpMap := map[string]bool{}
+			for _, eligibleIp := range eligibleIps {
+				eligibleIpMap[strings.TrimSpace(eligibleIp)] = true
+			}
+
+			for _, incomingIp := range incomingIps {
+				if eligibleIpMap[strings.TrimSpace(incomingIp)] {
 					return next(ctx, request)
 				}
 			}
 
-			lg.Context(ctx).Error().Log("msg", "did not find the IP address in whitelisted addresses", "incomingIP", ip, "validIps", ips)
+			lg.Context(ctx).Error().Log("msg", "did not find the IP address in whitelisted addresses", "incomingIP", ip, "validIps", config)
 			return nil, models.ErrUnauthorized
 		}
 	}
