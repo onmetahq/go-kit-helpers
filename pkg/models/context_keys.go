@@ -17,6 +17,7 @@ const (
 	USERID               contextKey = "UserID"
 	URLPath              contextKey = "URLPath"
 	HttpMethod           contextKey = "HttpMethod"
+	URLPathTemplate      contextKey = "URLPathTemplate"
 )
 
 type Claims struct {
