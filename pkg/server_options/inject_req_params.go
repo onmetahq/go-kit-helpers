@@ -15,6 +15,11 @@ func PutReqInCtx(ctx context.Context, r *http.Request) context.Context {
 	ctx = context.WithValue(ctx, models.PathParamsContextKey, vars)
 	ctx = context.WithValue(ctx, models.HttpMethod, r.Method)
 	ctx = context.WithValue(ctx, models.URLPath, r.URL.Path)
+	route := mux.CurrentRoute(r)
+	path, err := route.GetPathTemplate()
+	if err == nil {
+		ctx = context.WithValue(ctx, models.URLPathTemplate, path)
+	}
 
 	ctx = utils.FetchContextFromHeaders(ctx, r)
 
