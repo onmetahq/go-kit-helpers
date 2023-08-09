@@ -16,10 +16,10 @@ func Logger(logger log.Logger) endpoint.Middleware {
 			lg := ctxLogger.NewCtxLogger(logger)
 
 			startTime := time.Now()
-			lg.Context(ctx).Debug().Log("msg", "Server request started", "request", request, "path", ctx.Value(models.URLPath), "method", ctx.Value(models.HttpMethod))
+			lg.Context(ctx).Info().Log("msg", "Server request started", "request", request, "path", ctx.Value(models.URLPath), "method", ctx.Value(models.HttpMethod))
 			res, err := next(ctx, request)
 			elapsedTime := time.Since(startTime)
-			lg.Context(ctx).Debug().Log("msg", "Server request ended", "response", res, "duration", elapsedTime.Milliseconds(), "path", ctx.Value(models.URLPath), "method", ctx.Value(models.HttpMethod))
+			lg.Context(ctx).Info().Log("msg", "Server request ended", "response", res, "duration", elapsedTime.Milliseconds(), "path", ctx.Value(models.URLPath), "method", ctx.Value(models.HttpMethod))
 
 			return res, err
 		}
