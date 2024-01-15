@@ -53,4 +53,7 @@ var (
 	ErrUnauthorized = errors.New("unauthorized to access")
 
 	ErrNotFound = errors.New("data not found")
+
+ 	ErrForbidden = errors.New("user is forbidden")
+
 )
