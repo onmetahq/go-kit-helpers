@@ -18,7 +18,6 @@ func OptionalJWTValidator(hmacSecret string, logger log.Logger) endpoint.Middlew
 
 			tokenString, ok := ctx.Value(models.JWTContextKey).(string)
 			if !ok {
-				lg.Context(ctx).Error().Log("msg", "Invalid JWT", "token", tokenString)
 				return next(ctx, request)
 			}
 
@@ -46,12 +45,12 @@ func OptionalJWTValidator(hmacSecret string, logger log.Logger) endpoint.Middlew
 					}
 				}
 				lg.Context(ctx).Error().Log("msg", "Error JWT", "token", tokenString, "error", err)
-				return next(ctx, request)
+				return nil, models.ErrUnauthorized
 			}
 
 			if !token.Valid {
 				lg.Context(ctx).Error().Log("msg", "Invalid Token", "token", tokenString)
-				return next(ctx, request)
+				return nil, models.ErrUnauthorized
 			}
 
 			ctx = context.WithValue(ctx, models.JWTClaimsContextKey, claims)
