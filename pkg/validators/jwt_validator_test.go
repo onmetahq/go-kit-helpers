@@ -76,7 +76,7 @@ func TestOptionalJWTValidator(t *testing.T) {
 				},
 			},
 			output: output{
-				err: nil,
+				err: models.ErrUnauthorized,
 			},
 		},
 		{
