@@ -113,13 +113,13 @@ func MerchantAPIKeyValidator(svc KeyValidator) endpoint.Middleware {
 		return func(ctx context.Context, request interface{}) (response interface{}, err error) {
 			apikey, ok := ctx.Value(ctxKeys.MerchantAPIKey).(string)
 			if !ok {
-				slog.ErrorContext(ctx, "Invalid Merchant API key", "apikey", apikey)
+				slog.ErrorContext(ctx, "Invalid Merchant API key")
 				return nil, models.ErrUnauthorized
 			}
 
 			mer, err := svc.ValidateKey(ctx, apikey)
 			if err != nil || mer.ID == "" {
-				slog.ErrorContext(ctx, "Merchant API key validation failed", "apikey", apikey, "error", err)
+				slog.ErrorContext(ctx, "Merchant API key validation failed", "error", err)
 				return nil, models.ErrUnauthorized
 			}
 
