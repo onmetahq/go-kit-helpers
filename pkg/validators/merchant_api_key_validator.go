@@ -2,11 +2,10 @@ package validators
 
 import (
 	"context"
+	"log/slog"
 	"time"
 
 	"github.com/go-kit/kit/endpoint"
-	"github.com/go-kit/log"
-	ctxLogger "github.com/onmetahq/go-kit-helpers/pkg/logger"
 	"github.com/onmetahq/go-kit-helpers/pkg/models"
 	metahttp "github.com/onmetahq/meta-http/pkg/meta_http"
 	ctxKeys "github.com/onmetahq/meta-http/pkg/models"
@@ -109,20 +108,18 @@ func (svc DefaultValidator) ValidateKey(ctx context.Context, apikey string) (Mer
 	return mer, nil
 }
 
-func MerchantAPIKeyValidator(svc KeyValidator, logger log.Logger) endpoint.Middleware {
+func MerchantAPIKeyValidator(svc KeyValidator) endpoint.Middleware {
 	return func(next endpoint.Endpoint) endpoint.Endpoint {
 		return func(ctx context.Context, request interface{}) (response interface{}, err error) {
-			lg := ctxLogger.NewCtxLogger(logger)
-
 			apikey, ok := ctx.Value(ctxKeys.MerchantAPIKey).(string)
 			if !ok {
-				lg.Context(ctx).Error().Log("msg", "Invalid Merchant API key")
+				slog.ErrorContext(ctx, "Invalid Merchant API key", "apikey", apikey)
 				return nil, models.ErrUnauthorized
 			}
 
 			mer, err := svc.ValidateKey(ctx, apikey)
 			if err != nil || mer.ID == "" {
-				lg.Context(ctx).Error().Log("msg", "Merchant API key does not exist")
+				slog.ErrorContext(ctx, "Merchant API key validation failed", "apikey", apikey, "error", err)
 				return nil, models.ErrUnauthorized
 			}
 

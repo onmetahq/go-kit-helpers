@@ -2,26 +2,14 @@ package validators
 
 import (
 	"context"
-	"os"
 	"testing"
 	"time"
 
 	"github.com/go-kit/kit/endpoint"
-	"github.com/go-kit/log"
 	"github.com/golang-jwt/jwt"
 	"github.com/onmetahq/go-kit-helpers/pkg/models"
 	"github.com/stretchr/testify/assert"
 )
-
-func initLogger() log.Logger {
-	logger := log.NewJSONLogger(os.Stderr)
-	logger = log.NewSyncLogger(logger)
-	return log.With(logger,
-		"service", "go-kit-helpers",
-		"time:", log.DefaultTimestampUTC,
-		"caller", log.DefaultCaller,
-	)
-}
 
 const SECRET = "abcdefg"
 
@@ -48,8 +36,6 @@ func generateJWTToken(claims jwt.Claims) (string, error) {
 }
 
 func TestOptionalJWTValidator(t *testing.T) {
-	logger := initLogger()
-
 	type input struct {
 		ctx  context.Context
 		next endpoint.Endpoint
@@ -109,14 +95,12 @@ func TestOptionalJWTValidator(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		_, err := OptionalJWTValidator(SECRET, logger)(test.input.next)(test.input.ctx, map[string]string{})
+		_, err := OptionalJWTValidator(SECRET)(test.input.next)(test.input.ctx, map[string]string{})
 		assert.Equal(t, test.output.err, err)
 	}
 }
 
 func TestJWTValidator(t *testing.T) {
-	logger := initLogger()
-
 	type input struct {
 		ctx  context.Context
 		next endpoint.Endpoint
@@ -176,7 +160,7 @@ func TestJWTValidator(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		_, err := JWTValidator(SECRET, logger)(test.input.next)(test.input.ctx, map[string]string{})
+		_, err := JWTValidator(SECRET)(test.input.next)(test.input.ctx, map[string]string{})
 		assert.Equal(t, test.output.err, err)
 	}
 }

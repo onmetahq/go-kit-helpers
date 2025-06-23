@@ -2,22 +2,18 @@ package options
 
 import (
 	"context"
+	"log/slog"
 
 	"github.com/go-kit/kit/transport"
-	"github.com/go-kit/log"
-	"github.com/onmetahq/go-kit-helpers/pkg/logger"
 )
 
 type errorLogger struct {
-	logger log.Logger
 }
 
-func NewErrorLogger(logger log.Logger) transport.ErrorHandler {
-	return &errorLogger{
-		logger: logger,
-	}
+func NewErrorLogger() transport.ErrorHandler {
+	return &errorLogger{}
 }
 
 func (l *errorLogger) Handle(ctx context.Context, err error) {
-	logger.NewCtxLogger(l.logger).Context(ctx).Error().Log("err", err)
+	slog.ErrorContext(ctx, "Error occurred in transport layer", "error", err)
 }
