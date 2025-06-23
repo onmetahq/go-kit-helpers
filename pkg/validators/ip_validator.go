@@ -2,37 +2,34 @@ package validators
 
 import (
 	"context"
+	"log/slog"
 	"os"
 	"strings"
 
 	"github.com/go-kit/kit/endpoint"
-	"github.com/go-kit/log"
-	ctxLogger "github.com/onmetahq/go-kit-helpers/pkg/logger"
 	"github.com/onmetahq/go-kit-helpers/pkg/models"
 	ctxKeys "github.com/onmetahq/meta-http/pkg/models"
 )
 
-func IPValidator(logger log.Logger) endpoint.Middleware {
+func IPValidator() endpoint.Middleware {
 	return func(next endpoint.Endpoint) endpoint.Endpoint {
 		return func(ctx context.Context, request interface{}) (response interface{}, err error) {
-			lg := ctxLogger.NewCtxLogger(logger)
-
 			apikey, ok := ctx.Value(ctxKeys.MerchantAPIKey).(string)
 			if !ok {
-				lg.Context(ctx).Error().Log("msg", "Invalid Merchant API key")
+				slog.ErrorContext(ctx, "Invalid Merchant API key", "apikey", apikey)
 				return nil, models.ErrUnauthorized
 			}
 
 			ip, ok1 := ctx.Value(ctxKeys.XForwardedFor).(string)
 			if !ok1 {
-				lg.Context(ctx).Debug().Log("msg", "did not find client ip address, overriding ip check")
+				slog.DebugContext(ctx, "X-Forwarded-For header not found", "apikey", apikey)
 				return next(ctx, request)
 			}
-			incomingIps := strings.Split(ip, ",")
 
+			incomingIps := strings.Split(ip, ",")
 			config := os.Getenv(apikey)
 			if len(config) == 0 {
-				lg.Context(ctx).Debug().Log("msg", "whitelisting is not configured for the api key", "apiKey", apikey)
+				slog.DebugContext(ctx, "Whitelisting not configured for API key", "apikey", apikey)
 				return next(ctx, request)
 			}
 
@@ -48,7 +45,7 @@ func IPValidator(logger log.Logger) endpoint.Middleware {
 				}
 			}
 
-			lg.Context(ctx).Error().Log("msg", "did not find the IP address in whitelisted addresses", "incomingIP", ip, "validIps", config)
+			slog.ErrorContext(ctx, "Unauthorized IP address", "incomingIP", ip, "validIps", config)
 			return nil, models.ErrUnauthorized
 		}
 	}

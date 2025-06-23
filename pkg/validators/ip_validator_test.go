@@ -13,8 +13,6 @@ import (
 
 func TestIPValidator(t *testing.T) {
 
-	logger := initLogger()
-
 	type input struct {
 		ctx  context.Context
 		next endpoint.Endpoint
@@ -113,7 +111,7 @@ func TestIPValidator(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		_, err := IPValidator(logger)(test.input.next)(test.input.ctx, map[string]string{})
+		_, err := IPValidator()(test.input.next)(test.input.ctx, map[string]string{})
 		assert.Equal(t, test.output.err, err, test.name)
 	}
 }
