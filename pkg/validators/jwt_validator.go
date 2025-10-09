@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
+	"net/url"
 	"os"
 	"time"
 
@@ -27,8 +28,8 @@ type BlacklistResponse struct {
 }
 
 func checkTokenBlacklist(ctx context.Context, tokenString string) (bool, error) {	
-	url := os.Getenv("BLACKLIST_API_URL")
-	if url == "" {
+	fullURL := os.Getenv("BLACKLIST_API_URL")
+	if fullURL == "" {
 		return false, fmt.Errorf("BLACKLIST_API_URL environment variable is not set")
 	}
 	
@@ -36,6 +37,16 @@ func checkTokenBlacklist(ctx context.Context, tokenString string) (bool, error) 
 	if apiKey == "" {
 		return false, fmt.Errorf("API_KEY environment variable is not set")
 	}
+	
+	// Parse the URL to get base URL and path
+	parsedURL, err := url.Parse(fullURL)
+	if err != nil {
+		return false, fmt.Errorf("invalid BLACKLIST_API_URL: %w", err)
+	}
+	
+	// Create base URL (scheme + host + port)
+	baseURL := fmt.Sprintf("%s://%s", parsedURL.Scheme, parsedURL.Host)
+	path := parsedURL.Path
 	
 	headers := map[string]string{
 		"Content-Type": "application/json",
@@ -46,9 +57,9 @@ func checkTokenBlacklist(ctx context.Context, tokenString string) (bool, error) 
 	var response BlacklistResponse
 	
 	logger := log.NewNopLogger()
-	client := metahttp.NewClient("", logger, 10*time.Second)
+	client := metahttp.NewClient(baseURL, logger, 10*time.Second)
 	
-	_, err := client.Post(ctx, url, headers, payload, &response)
+	_, err = client.Post(ctx, path, headers, payload, &response)
 	if err != nil {
 		return false, fmt.Errorf("failed to call blacklist API: %w", err)
 	}
