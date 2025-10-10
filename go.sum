@@ -38,6 +38,8 @@ github.com/matttproud/golang_protobuf_extensions v1.0.4 h1:mmDVorXM7PCGKw94cs5zk
 github.com/matttproud/golang_protobuf_extensions v1.0.4/go.mod h1:BSXmuO+STAnVfrANrmjBb36TMTDstsz7MSK+HVaYKv4=
 github.com/onmetahq/meta-http v0.0.2-alpha.0.20230718082101-326b0a824c02 h1:tDdmdv1E4KVcfnDeeyVlyPx9NhS/6+a7Eto5MoP/A08=
 github.com/onmetahq/meta-http v0.0.2-alpha.0.20230718082101-326b0a824c02/go.mod h1:EDwtfRpWEVE+ku9xZRRJMCIIRTs9I0qR/pAKGaIWcMA=
+github.com/onmetahq/meta-http v0.0.3 h1:o2lsM8rZArWp2OPJQyijZ/dt6/Q3WDIX+gKm6dPaq9E=
+github.com/onmetahq/meta-http v0.0.3/go.mod h1:1Pmj1gt7Kh2X+Dxd2M9XLV8YUlQfmmTg2T1GfsbFs1A=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/prometheus/client_golang v1.16.0 h1:yk/hx9hDbrGHovbci4BY+pRMfSuuat626eFsHb7tmT8=

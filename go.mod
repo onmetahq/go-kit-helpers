@@ -9,7 +9,7 @@ require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/uuid v1.3.0
 	github.com/gorilla/mux v1.8.0
-	github.com/onmetahq/meta-http v0.0.2-alpha.0.20230718082101-326b0a824c02
+	github.com/onmetahq/meta-http v0.0.3
 	github.com/prometheus/client_golang v1.16.0
 	github.com/stretchr/testify v1.8.1
 )

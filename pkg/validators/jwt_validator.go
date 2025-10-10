@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/go-kit/kit/endpoint"
-	"github.com/go-kit/log"
 	"github.com/golang-jwt/jwt"
 	"github.com/onmetahq/go-kit-helpers/pkg/models"
 	metahttp "github.com/onmetahq/meta-http/pkg/meta_http"
@@ -27,43 +26,42 @@ type BlacklistResponse struct {
 	} `json:"data"`
 }
 
-func checkTokenBlacklist(ctx context.Context, tokenString string) (bool, error) {	
+func checkTokenBlacklist(ctx context.Context, tokenString string) (bool, error) {
 	fullURL := os.Getenv("BLACKLIST_API_URL")
 	if fullURL == "" {
 		return false, fmt.Errorf("BLACKLIST_API_URL environment variable is not set")
 	}
-	
+
 	apiKey := os.Getenv("API_KEY")
 	if apiKey == "" {
 		return false, fmt.Errorf("API_KEY environment variable is not set")
 	}
-	
+
 	// Parse the URL to get base URL and path
 	parsedURL, err := url.Parse(fullURL)
 	if err != nil {
 		return false, fmt.Errorf("invalid BLACKLIST_API_URL: %w", err)
 	}
-	
+
 	// Create base URL (scheme + host + port)
 	baseURL := fmt.Sprintf("%s://%s", parsedURL.Scheme, parsedURL.Host)
 	path := parsedURL.Path
-	
+
 	headers := map[string]string{
 		"Content-Type": "application/json",
 		"apikey":       apiKey,
 	}
-	
+
 	payload := BlacklistRequest{AccessToken: tokenString}
 	var response BlacklistResponse
-	
-	logger := log.NewNopLogger()
-	client := metahttp.NewClient(baseURL, logger, 10*time.Second)
-	
+
+	client := metahttp.NewClient(baseURL, slog.Default(), 10*time.Second)
+
 	_, err = client.Post(ctx, path, headers, payload, &response)
 	if err != nil {
 		return false, fmt.Errorf("failed to call blacklist API: %w", err)
 	}
-	
+
 	return response.Success && response.Data.IsBlacklisted, nil
 }
 
