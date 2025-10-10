@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/go-kit/kit/endpoint"
-	"github.com/go-kit/log"
 	"github.com/golang-jwt/jwt"
 	"github.com/onmetahq/go-kit-helpers/pkg/models"
 	metahttp "github.com/onmetahq/meta-http/pkg/meta_http"
@@ -56,7 +55,7 @@ func checkTokenBlacklist(ctx context.Context, tokenString string) (bool, error) 
 	payload := BlacklistRequest{AccessToken: tokenString}
 	var response BlacklistResponse
 	
-	logger := log.NewNopLogger()
+	logger := slog.Default()
 	client := metahttp.NewClient(baseURL, logger, 10*time.Second)
 	
 	_, err = client.Post(ctx, path, headers, payload, &response)
