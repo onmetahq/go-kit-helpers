@@ -32,7 +32,7 @@ func checkTokenBlacklist(ctx context.Context, tokenString string) (bool, error) 
 		return false, fmt.Errorf("BLACKLIST_API_URL environment variable is not set")
 	}
 
-	apiKey := os.Getenv("API_KEY")
+	apiKey := os.Getenv("REQUEST_KEY")
 	if apiKey == "" {
 		return false, fmt.Errorf("API_KEY environment variable is not set")
 	}
