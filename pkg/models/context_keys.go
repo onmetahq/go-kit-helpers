@@ -56,4 +56,6 @@ var (
 
  	ErrForbidden = errors.New("user is forbidden")
 
+	ErrInternalServerError = errors.New("internal server error")
+
 )
