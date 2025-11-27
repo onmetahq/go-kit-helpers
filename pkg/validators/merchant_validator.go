@@ -56,7 +56,7 @@ func MerchantValidatorMiddleware() endpoint.Middleware {
 				return nil, models.ErrInternalServerError
 			}
 
-			if !apiResponse.IsApproved || !apiResponse.IsUnderMaintenance {
+			if !apiResponse.IsApproved || apiResponse.IsUnderMaintenance {
 				slog.WarnContext(ctx, "Merchant KYB not approved", "tenantId", tenantId, "message", apiResponse.Message)
 				return nil, models.ErrUnauthorized
 			}
