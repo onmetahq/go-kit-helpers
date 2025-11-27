@@ -16,10 +16,11 @@ type GetKybStatusRequest struct {
 	MerchantId string `json:"merchantId"`
 }
 
-type KybStatusResponse struct {
-	Success    bool   `json:"success"`
-	IsApproved bool   `json:"is_approved"`
-	Message    string `json:"msg"`
+type ValidateKybResponse struct {
+	Success            bool   `json:"success"`
+	IsApproved         bool   `json:"is_approved"`
+	Message            string `json:"msg"`
+	IsUnderMaintenance bool   `json:"isUnderMaintenance"`
 }
 
 func MerchantValidatorMiddleware() endpoint.Middleware {
@@ -43,19 +44,19 @@ func MerchantValidatorMiddleware() endpoint.Middleware {
 				MerchantId: tenantId,
 			}
 
-			var apiResponse KybStatusResponse
-			_, err = httpClient.Post(ctx, "/merchant/v1/kyb/status", headers, requestBody, &apiResponse)
+			var apiResponse ValidateKybResponse
+			_, err = httpClient.Post(ctx, "/merchant/v1/kyb/validate", headers, requestBody, &apiResponse)
 			if err != nil {
 				slog.ErrorContext(ctx, "Failed to fetch KYB status", "tenantId", tenantId, "err", err)
 				return nil, models.ErrInternalServerError
 			}
 
 			if !apiResponse.Success {
-				slog.ErrorContext(ctx, "KYB status API returned unsuccessful response", "tenantId", tenantId, "message", apiResponse.Message)
+				slog.ErrorContext(ctx, "Validate API returned unsuccessful response", "tenantId", tenantId, "message", apiResponse.Message)
 				return nil, models.ErrInternalServerError
 			}
 
-			if !apiResponse.IsApproved {
+			if !apiResponse.IsApproved || !apiResponse.IsUnderMaintenance {
 				slog.WarnContext(ctx, "Merchant KYB not approved", "tenantId", tenantId, "message", apiResponse.Message)
 				return nil, models.ErrUnauthorized
 			}
