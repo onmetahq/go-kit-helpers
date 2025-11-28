@@ -40,12 +40,8 @@ func MerchantValidatorMiddleware() endpoint.Middleware {
 				"apikey":       os.Getenv("REQUEST_KEY"),
 			}
 
-			requestBody := GetKybStatusRequest{
-				MerchantId: tenantId,
-			}
-
 			var apiResponse ValidateKybResponse
-			_, err = httpClient.Post(ctx, "/merchant/v1/validate", headers, requestBody, &apiResponse)
+			_, err = httpClient.Get(ctx, "/merchant/v1/validate/"+tenantId, headers, &apiResponse)
 			if err != nil {
 				slog.ErrorContext(ctx, "Failed to fetch KYB status", "tenantId", tenantId, "err", err)
 				return nil, models.ErrInternalServerError
