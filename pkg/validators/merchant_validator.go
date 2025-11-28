@@ -45,7 +45,7 @@ func MerchantValidatorMiddleware() endpoint.Middleware {
 			}
 
 			var apiResponse ValidateKybResponse
-			_, err = httpClient.Post(ctx, "/merchant/v1/kyb/validate", headers, requestBody, &apiResponse)
+			_, err = httpClient.Post(ctx, "/merchant/v1/validate", headers, requestBody, &apiResponse)
 			if err != nil {
 				slog.ErrorContext(ctx, "Failed to fetch KYB status", "tenantId", tenantId, "err", err)
 				return nil, models.ErrInternalServerError
@@ -57,7 +57,7 @@ func MerchantValidatorMiddleware() endpoint.Middleware {
 			}
 
 			if !apiResponse.IsApproved || apiResponse.IsUnderMaintenance {
-				slog.WarnContext(ctx, "Merchant KYB not approved", "tenantId", tenantId, "message", apiResponse.Message)
+				slog.WarnContext(ctx, "Merchant KYB not approved", "tenantId", tenantId, "isApproved", apiResponse.IsApproved, "isUnderMaintenance", apiResponse.IsUnderMaintenance, "message", apiResponse.Message)
 				return nil, models.ErrUnauthorized
 			}
 
