@@ -21,6 +21,7 @@ type Merchant struct {
 	WebhookUrl string    `json:"webhookUrl"`
 	APIKey     string    `json:"apiKey"`
 	APISecret  string    `json:"apiSecret"`
+	IPs        []string  `json:"ips"`
 }
 
 type MerchantAPIResponse struct {
@@ -110,7 +111,7 @@ func (svc DefaultValidator) ValidateKey(ctx context.Context, apikey string) (Mer
 
 func MerchantAPIKeyValidator(svc KeyValidator) endpoint.Middleware {
 	return func(next endpoint.Endpoint) endpoint.Endpoint {
-		return func(ctx context.Context, request interface{}) (response interface{}, err error) {
+		return func(ctx context.Context, request any) (response any, err error) {
 			apikey, ok := ctx.Value(ctxKeys.MerchantAPIKey).(string)
 			if !ok {
 				slog.ErrorContext(ctx, "Invalid Merchant API key")
@@ -121,6 +122,10 @@ func MerchantAPIKeyValidator(svc KeyValidator) endpoint.Middleware {
 			if err != nil || mer.ID == "" {
 				slog.ErrorContext(ctx, "Merchant API key validation failed", "error", err)
 				return nil, models.ErrUnauthorized
+			}
+
+			if len(mer.IPs) > 0 {
+				ctx = context.WithValue(ctx, models.MerchantAllowedIPsContextKey, mer.IPs)
 			}
 
 			ctx = context.WithValue(ctx, ctxKeys.TenantID, mer.ID)

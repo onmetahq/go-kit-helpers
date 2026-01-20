@@ -13,27 +13,38 @@ import (
 
 func IPValidator() endpoint.Middleware {
 	return func(next endpoint.Endpoint) endpoint.Endpoint {
-		return func(ctx context.Context, request interface{}) (response interface{}, err error) {
+		return func(ctx context.Context, request any) (response any, err error) {
 			apikey, ok := ctx.Value(ctxKeys.MerchantAPIKey).(string)
 			if !ok {
 				slog.ErrorContext(ctx, "Invalid Merchant API key", "apikey", apikey)
 				return nil, models.ErrUnauthorized
 			}
 
-			ip, ok1 := ctx.Value(ctxKeys.XForwardedFor).(string)
+			incomingXFF, ok1 := ctx.Value(ctxKeys.XForwardedFor).(string)
 			if !ok1 {
 				slog.DebugContext(ctx, "X-Forwarded-For header not found", "apikey", apikey)
 				return next(ctx, request)
 			}
 
-			incomingIps := strings.Split(ip, ",")
-			config := os.Getenv(apikey)
-			if len(config) == 0 {
-				slog.DebugContext(ctx, "Whitelisting not configured for API key", "apikey", apikey)
-				return next(ctx, request)
+			incomingIps := strings.Split(incomingXFF, ",")
+
+			// fallback to env var for backwards compatibility.
+			var eligibleIps []string
+			if v := ctx.Value(models.MerchantAllowedIPsContextKey); v != nil {
+				if ips, ok := v.([]string); ok && len(ips) > 0 {
+					eligibleIps = ips
+				}
 			}
 
-			eligibleIps := strings.Split(config, ",")
+			if len(eligibleIps) == 0 {
+				config := os.Getenv(apikey)
+				if len(config) == 0 {
+					slog.DebugContext(ctx, "Whitelisting not configured for API key", "apikey", apikey)
+					return next(ctx, request)
+				}
+				eligibleIps = strings.Split(config, ",")
+			}
+
 			eligibleIpMap := map[string]bool{}
 			for _, eligibleIp := range eligibleIps {
 				eligibleIpMap[strings.TrimSpace(eligibleIp)] = true
@@ -45,7 +56,7 @@ func IPValidator() endpoint.Middleware {
 				}
 			}
 
-			slog.ErrorContext(ctx, "Unauthorized IP address", "incomingIP", ip, "validIps", config)
+			slog.ErrorContext(ctx, "Unauthorized IP address", "incomingIP", incomingXFF, "validIps", strings.Join(eligibleIps, ","))
 			return nil, models.ErrUnauthorized
 		}
 	}

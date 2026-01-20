@@ -10,14 +10,15 @@ type contextKey string
 
 const (
 	// JWTContextKey holds the key used to store a JWT in the context.
-	JWTContextKey        contextKey = "JWTToken"
-	JWTTokenContextKey              = JWTContextKey
-	JWTClaimsContextKey  contextKey = "JWTClaims"
-	PathParamsContextKey contextKey = "PathParams"
-	USERID               contextKey = "UserID"
-	URLPath              contextKey = "URLPath"
-	HttpMethod           contextKey = "HttpMethod"
-	URLPathTemplate      contextKey = "URLPathTemplate"
+	JWTContextKey                contextKey = "JWTToken"
+	JWTTokenContextKey                      = JWTContextKey
+	JWTClaimsContextKey          contextKey = "JWTClaims"
+	PathParamsContextKey         contextKey = "PathParams"
+	USERID                       contextKey = "UserID"
+	URLPath                      contextKey = "URLPath"
+	HttpMethod                   contextKey = "HttpMethod"
+	URLPathTemplate              contextKey = "URLPathTemplate"
+	MerchantAllowedIPsContextKey contextKey = "WhitelistedIPs"
 )
 
 type Claims struct {
@@ -54,8 +55,7 @@ var (
 
 	ErrNotFound = errors.New("data not found")
 
- 	ErrForbidden = errors.New("user is forbidden")
+	ErrForbidden = errors.New("user is forbidden")
 
 	ErrInternalServerError = errors.New("internal server error")
-
 )
