@@ -24,6 +24,7 @@ func TestIPValidator(t *testing.T) {
 
 	validIps := "10.20.1.3,asdaD,223.34.34.1,SADFASDF"
 	os.Setenv("apiKey", validIps)
+	os.Setenv("apiKey_ctx", "1.2.3.4")
 
 	tests := []struct {
 		name   string
@@ -101,6 +102,23 @@ func TestIPValidator(t *testing.T) {
 					return context.WithValue(ctx, ctxKeys.MerchantAPIKey, "apiKey")
 				}(),
 				next: func(ctx context.Context, request interface{}) (response interface{}, err error) {
+					return nil, nil
+				},
+			},
+			output: output{
+				err: nil,
+			},
+		},
+		{
+			name: "allowed IPs from context are used (env var doesn't match)",
+			input: input{
+				ctx: func() context.Context {
+					ctx := context.TODO()
+					ctx = context.WithValue(ctx, ctxKeys.XForwardedFor, "10.20.1.3")
+					ctx = context.WithValue(ctx, models.MerchantAllowedIPsContextKey, []string{"10.20.1.3"})
+					return context.WithValue(ctx, ctxKeys.MerchantAPIKey, "apiKey_ctx")
+				}(),
+				next: func(ctx context.Context, request any) (response any, err error) {
 					return nil, nil
 				},
 			},
